@@ -4,6 +4,20 @@
 
 {% block content %}
 
+{% if task.is_due %}
+<div class="alert alert-danger alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <strong>Rush!</strong> This task is due!
+</div>
+{% endif %}
+
+{% if task.is_due_today %}
+<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <strong>Quick!</strong> This task needs to be done today!
+</div>
+{% endif %}
+
 <div class="panel panel-info">
     <div class="panel-heading">{{ task.title }} <a href="{% url 'edit_task' pk=task.pk %}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-edit"></span></a> <span class="badge pull-right">{{ task.get_type_display }}</span></div>
     <div class="panel-body">
