@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, DetailView
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect
 
@@ -34,3 +34,9 @@ class CreateTaskView(LoginRequiredMixin, CreateView):
         self.object.created_by = self.request.user
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
+
+class DetailTaskView(LoginRequiredMixin, DetailView):
+    """
+    View to show the details of a task.
+    """
+    model = Task
