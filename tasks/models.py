@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
+from django.utils import timezone
 
 from model_utils import Choices
 
@@ -44,6 +45,24 @@ class Task(TimeStampedModel):
     type = models.PositiveIntegerField(choices=TYPE_CHOICES,
                                        default=TYPE_CHOICES.task)
     done = models.BooleanField(editable=False, default=False)
+
+    def is_due(self):
+        """
+        Return True if this task crossed due date, otherwise false.
+        """
+        if self.due_date < timezone.now().date():
+            return True
+        else:
+            return False
+
+    def is_due_today(self):
+        """
+        Check if the task due date is today
+        """
+        if self.due_date == timezone.now().date():
+            return True
+        else:
+            return False
 
     def get_absolute_url(self):
         return reverse_lazy('task_detail', kwargs={'pk': self.pk})
