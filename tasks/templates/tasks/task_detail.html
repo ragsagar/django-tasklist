@@ -4,6 +4,26 @@
 
 <div class="panel panel-info">
     <div class="panel-heading">{{ task.title }}</div>
-    <div class="panel-body">{{ task.description }}</div>
+    <div class="panel-body">
+        <table class="table table-condensed">
+            <tbody>
+            <tr>
+                <td><strong>Description</strong></td><td>{{ task.description }}</td>
+            </tr>
+            <tr>
+                <td><strong>Due date</strong></td><td>{{ task.due_date }}</td>
+            </tr>
+            <tr>
+                <td><strong>Created by</strong></td><td>{{ task.created_by }}</td>
+            </tr>
+            <tr>
+                <td><strong>Priority</strong></td><td>{{ task.get_priority_display }}</td>
+            </tr>
+            <tr>
+                <td><strong>Assigned to</strong></td><td>{{ task.assigned_user }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}
