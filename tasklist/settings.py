@@ -37,7 +37,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #'django.contrib.comments',
+    'django.contrib.sites',
+    'django.contrib.comments',
     'crispy_forms',
     'django_tables2',
     'tasks',
@@ -112,3 +113,5 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 LOGIN_URL = reverse('login')
 
 LOGIN_REDIRECT_URL = reverse('list_tasks')
+
+SITE_ID = 1
