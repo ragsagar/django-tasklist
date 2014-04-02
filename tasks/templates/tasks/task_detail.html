@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
+{% load comments %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 
 <div class="panel panel-info">
-    <div class="panel-heading">{{ task.title }}</div>
+    <div class="panel-heading">{{ task.title }} <a href="{% url 'edit_task' pk=task.pk %}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-edit"></span></a> <span class="badge pull-right">{{ task.get_type_display }}</span></div>
     <div class="panel-body">
         <table class="table table-condensed">
             <tbody>
@@ -14,7 +16,7 @@
                 <td><strong>Due date</strong></td><td>{{ task.due_date }}</td>
             </tr>
             <tr>
-                <td><strong>Created by</strong></td><td>{{ task.created_by }}</td>
+                <td><strong>Created by</strong></td><td>{{ task.created_by.get_full_name|default:task.created_by }}</td>
             </tr>
             <tr>
                 <td><strong>Priority</strong></td><td>{{ task.get_priority_display }}</td>
@@ -26,4 +28,46 @@
         </table>
     </div>
 </div>
+
+<div class="panel panel-default">
+    <div class="panel-header"><strong>Follow up</strong></div>
+    <div class="panel-body">
+        {% get_comment_list for task as comment_list %}
+        {% for comment in comment_list %}
+            <div class="panel">
+                <div class="panel-footer">
+                    #{{ forloop.counter }} {{ comment.user.get_full_name|default:comment.user }} at {{ comment.submit_date }}
+                </div>
+                <div class="panel-body">
+                    <a name="c{{ comment.id }}"></a>
+                    {{ comment.comment }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="panel">
+        <div class="panel-body">
+            {% get_comment_form for task as form %}
+        <table>
+        <form action="{% comment_form_target %}" method="POST">
+            {% csrf_token %}
+            <div id="div_id_comment" class="form-group">
+                <label for="id_comment" class="control-label ">Comment</label>
+                <div class="controls ">
+                    <textarea id="id_comment" name="comment" cols="20" class="form-control" rows="2"></textarea>
+                <div>
+            </div>
+            {{ form.content_type }}
+            {{ form.object_pk }}
+            {{ form.timestamp }}
+            {{ form.security_hash }}
+            <input type="hidden" name="next" value="{% url 'task_detail' task.pk %}" />
+            <input type="submit" class="btn btn-default btn-xs" value="Add" id="id_submit" />
+        </form>
+        </table>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
