@@ -43,3 +43,6 @@ class Task(TimeStampedModel):
     type = models.PositiveIntegerField(choices=TYPE_CHOICES,
                                        default=TYPE_CHOICES.task)
     done = models.BooleanField(editable=False, default=False)
+
+    def __str__(self):
+        return self.title
