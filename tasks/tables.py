@@ -1,11 +1,14 @@
 import django_tables2 as tables
+from django_tables2.utils import A
 
 from .models import Task
 
 class TaskTable(tables.Table):
+    id = tables.LinkColumn('task_detail', args=[A('pk')])
+
     class Meta:
         model = Task
-        attrs = {'class': 'table '}
+        attrs = {'class': 'table rowlink', }
         exclude = ('last_modified',)
         order_by = '-created'
         per_page = 20
