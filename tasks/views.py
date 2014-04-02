@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import ListView, CreateView, DetailView
+from django.views.generic import ListView, CreateView, DetailView, UpdateView
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect
 
@@ -43,8 +43,25 @@ class CreateTaskView(LoginRequiredMixin, CreateView):
         self.object.save()
         return HttpResponseRedirect(reverse('list_tasks'))
 
+
 class DetailTaskView(LoginRequiredMixin, DetailView):
     """
     View to show the details of a task.
     """
     model = Task
+
+
+class UpdateTaskView(LoginRequiredMixin, UpdateView):
+    """
+    View to update existing task.
+    """
+    model = Task
+
+    def post(self, request, *args, **kwargs):
+        """
+        Overriding to handle cancel button.
+        """
+        if 'cancel' in request.POST:
+            self.object = self.get_object()
+            return HttpResponseRedirect(self.get_success_url())
+        return super(UpdateTaskView, self).post(request, *args, **kwargs)
