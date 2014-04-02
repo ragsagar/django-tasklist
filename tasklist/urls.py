@@ -12,6 +12,7 @@ urlpatterns = patterns('',
     url(r'^$', RedirectView.as_view(url='tasks/'), name='home'),
     url(r'^tasks/', include('tasks.urls')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^comments/', include('django.contrib.comments.urls')),
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', name='login'),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout_then_login', name='logout'),
 )
