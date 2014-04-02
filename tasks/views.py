@@ -1,5 +1,6 @@
-from django.shortcuts import render
-from django.views.generic import ListView, CreateView, DetailView, UpdateView
+from django.shortcuts import render, get_object_or_404
+from django.views.generic import (ListView, CreateView, DetailView, UpdateView,
+    View)
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect
 
@@ -65,3 +66,17 @@ class UpdateTaskView(LoginRequiredMixin, UpdateView):
             self.object = self.get_object()
             return HttpResponseRedirect(self.get_success_url())
         return super(UpdateTaskView, self).post(request, *args, **kwargs)
+
+
+class ToggleTaskDoneView(LoginRequiredMixin, View):
+    """
+    View to toggle mark a task as done or not done.
+    """
+    def post(self, request, *args, **kwargs):
+        """
+        Get the task object and toggle the done flag.
+        """
+        task = get_object_or_404(Task, pk=self.kwargs.get('pk'))
+        task.done = not task.done
+        task.save()
+        return HttpResponseRedirect(task.get_absolute_url())
