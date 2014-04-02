@@ -31,7 +31,6 @@ class CreateTaskView(LoginRequiredMixin, CreateView):
         task.
         """
         self.object = form.save(commit=False)
-        if self.request.user.is_authenticated():
-            self.object.created_by = self.request.user
+        self.object.created_by = self.request.user
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
