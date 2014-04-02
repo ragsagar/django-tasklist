@@ -38,6 +38,9 @@
             <tr>
                 <td><strong>Assigned to</strong></td><td>{{ task.assigned_user.get_full_name|default:task.assigned_user }}</td>
             </tr>
+            <tr>
+                <td><strong>Module</strong></td><td>{{ task.module }}</td>
+            </tr>
             </tbody>
         </table>
     </div>
