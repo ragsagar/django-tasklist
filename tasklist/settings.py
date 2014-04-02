@@ -110,3 +110,5 @@ TEMPLATE_CONTEXT_PROCESSORS = (
         )
 
 LOGIN_URL = reverse('login')
+
+LOGIN_REDIRECT_URL = reverse('list_tasks')
