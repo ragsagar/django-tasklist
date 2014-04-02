@@ -66,6 +66,9 @@
         $('.dateinput').datepicker();
         $('.logout-button').tooltip();
         $('table.rowlink').rowlink()
+
+        {% block js %}
+        {% endblock %}
     });
     </script>
 </html>
