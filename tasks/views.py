@@ -25,6 +25,14 @@ class CreateTaskView(LoginRequiredMixin, CreateView):
     model = Task
     success_url = reverse_lazy('list_tasks')
 
+    def post(self, request, *args, **kwargs):
+        """
+        Overriding default method to add support of cancel button.
+        """
+        if 'cancel' in request.POST:
+            return HttpResponseRedirect(reverse_lazy('list_tasks'))
+        return super(CreateTaskView, self).post(request, *args, **kwargs)
+
     def form_valid(self, form):
         """
         Overriding default functionality for saving the user who created the
@@ -33,7 +41,7 @@ class CreateTaskView(LoginRequiredMixin, CreateView):
         self.object = form.save(commit=False)
         self.object.created_by = self.request.user
         self.object.save()
-        return HttpResponseRedirect(self.get_success_url())
+        return HttpResponseRedirect(reverse('list_tasks'))
 
 class DetailTaskView(LoginRequiredMixin, DetailView):
     """
