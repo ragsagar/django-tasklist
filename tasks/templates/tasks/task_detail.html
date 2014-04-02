@@ -4,22 +4,32 @@
 
 {% block content %}
 
-{% if task.is_due %}
-<div class="alert alert-danger alert-dismissable">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    <strong>Rush!</strong> This task is due!
-</div>
-{% endif %}
-
-{% if task.is_due_today %}
-<div class="alert alert-warning alert-dismissable">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    <strong>Quick!</strong> This task needs to be done today!
-</div>
+{% if not task.done %}
+    {% if task.is_due %}
+    <div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <strong>Rush!</strong> This task is due!
+    </div>
+    {% endif %}
+    {% if task.is_due_today %}
+    <div class="alert alert-warning alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <strong>Quick!</strong> This task needs to be done today!
+    </div>
+    {% endif %}
+{% else %}
+    <div class="alert alert-success alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        This is a completed task!
+    </div>
 {% endif %}
 
 <div class="panel panel-info">
-    <div class="panel-heading">{{ task.title }} <a href="{% url 'edit_task' pk=task.pk %}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-edit"></span></a> <span class="badge pull-right">{{ task.get_type_display }}</span></div>
+    <div class="panel-heading">
+        {{ task.title }} 
+        <a href="{% url 'edit_task' pk=task.pk %}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-edit"></span></a>
+        <span class="badge pull-right">{{ task.get_type_display }}</span>
+    </div>
     <div class="panel-body">
         <table class="table table-condensed">
             <tbody>
@@ -40,6 +50,19 @@
             </tr>
             <tr>
                 <td><strong>Module</strong></td><td>{{ task.module }}</td>
+            </tr>
+            <tr>
+                <td><strong>State</strong></td>
+                <td>
+                <form action="{% url 'toggle_task_done' pk=task.pk %}" method="post">
+                    {% csrf_token %}
+                {% if task.done %} 
+                    <button type="submit" class="btn btn-default btn-xs">Mark as not done</button>
+                {% else %}
+                    <button type="submit" class="btn btn-default btn-xs">Mark as done</button>
+                {% endif %}
+                </form>
+                </td>
             </tr>
             </tbody>
         </table>
