@@ -20,7 +20,7 @@
                 <td><strong>Priority</strong></td><td>{{ task.get_priority_display }}</td>
             </tr>
             <tr>
-                <td><strong>Assigned to</strong></td><td>{{ task.assigned_user }}</td>
+                <td><strong>Assigned to</strong></td><td>{{ task.assigned_user.get_full_name|default:task.assigned_user }}</td>
             </tr>
             </tbody>
         </table>
