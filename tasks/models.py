@@ -41,6 +41,7 @@ class Task(TimeStampedModel):
     assigned_user = models.ForeignKey(settings.AUTH_USER_MODEL,
                                       null=True,
                                       blank=True,
+                                      verbose_name="Assigned To",
                                       related_name='assigned_tasks')
     type = models.PositiveIntegerField(choices=TYPE_CHOICES,
                                        default=TYPE_CHOICES.task)
