@@ -18,7 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ''
+SECRET_KEY = 'c&6umcx*ex@^k+-7vh(%!%7j0w+)=l0t9v(i1k%!=#-ptk*8p1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -115,3 +115,6 @@ LOGIN_URL = reverse('login')
 LOGIN_REDIRECT_URL = reverse('list_tasks')
 
 SITE_ID = 1
+
+import dj_database_url
+DATABASES['default'] =  dj_database_url.config()
