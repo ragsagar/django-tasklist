@@ -42,7 +42,7 @@ class CreateTaskView(LoginRequiredMixin, CreateView):
         self.object = form.save(commit=False)
         self.object.created_by = self.request.user
         self.object.save()
-        return HttpResponseRedirect(reverse('list_tasks'))
+        return HttpResponseRedirect(reverse_lazy('list_tasks'))
 
 
 class DetailTaskView(LoginRequiredMixin, DetailView):
