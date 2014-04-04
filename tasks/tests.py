@@ -24,7 +24,7 @@ class TaskTestCase(TestCase):
         self.task = Task.objects.create(**data)
         self.client.login(username='ragsagar', password='password')
 
-    def test_list_tasks(self):
+    def test_list_tasks_view(self):
         """
         Tests for the view to list all tasks.
         """
@@ -34,7 +34,7 @@ class TaskTestCase(TestCase):
         tasks = Task.objects.all()
         self.assertEqual(len(response.context_data['task_list']), tasks.count())
 
-    def test_detail_task(self):
+    def test_detail_task_view(self):
         """
         Test detail task view page.
         """
