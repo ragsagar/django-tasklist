@@ -9,6 +9,6 @@ class TaskTable(tables.Table):
     class Meta:
         model = Task
         attrs = {'class': 'table table-condensed rowlink', }
-        exclude = ('last_modified', 'created_by')
+        exclude = ('last_modified', 'created_by', 'created', 'description')
         order_by = '-created'
         per_page = 20
