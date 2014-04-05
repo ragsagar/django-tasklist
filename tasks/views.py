@@ -1,3 +1,5 @@
+import json
+
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import (ListView, CreateView, DetailView, UpdateView,
     View)
@@ -23,7 +25,7 @@ class ListTasksView(LoginRequiredMixin, SingleTableView):
         To filter for complete and incomplete tasks.
         """
         queryset = super(ListTasksView, self).get_queryset()
-        status = self.request.GET.get('done')
+        status = self.request.GET.get('status')
         if status:
             queryset = queryset.filter(done=status)
         return queryset
