@@ -27,6 +27,9 @@ class Task(TimeStampedModel):
                            (2, 'enhancement', 'Enhancement'),
                            (3, 'task', 'Task'),
                            (4, 'proposal', 'Proposal'))
+    STATUS_CHOICES = Choices((1, 'incomplete', 'Incomplete'),
+                             (2, 'read_for_review', 'Ready for Review'),
+                             (3, 'complete', 'Complete'))
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL,
                                    null=True,
                                    blank=True,
@@ -45,6 +48,9 @@ class Task(TimeStampedModel):
                                       related_name='assigned_tasks')
     type = models.PositiveIntegerField(choices=TYPE_CHOICES,
                                        default=TYPE_CHOICES.task)
+    status = models.PositiveIntegerField(choices=STATUS_CHOICES,
+                                         default=STATUS_CHOICES.incomplete,
+                                         editable=False)
     done = models.BooleanField(editable=False, default=False)
 
     class Meta:
