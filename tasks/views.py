@@ -27,7 +27,7 @@ class ListTasksView(LoginRequiredMixin, SingleTableView):
         queryset = super(ListTasksView, self).get_queryset()
         status = self.request.GET.get('status')
         if status:
-            queryset = queryset.filter(done=status)
+            queryset = queryset.filter(status=status)
         return queryset
 
 
