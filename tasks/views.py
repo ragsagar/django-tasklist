@@ -18,6 +18,16 @@ class ListTasksView(LoginRequiredMixin, SingleTableView):
     model = Task
     table_class = TaskTable
 
+    def get_queryset(self):
+        """
+        To filter for complete and incomplete tasks.
+        """
+        queryset = super(ListTasksView, self).get_queryset()
+        status = self.request.GET.get('done')
+        if status:
+            queryset = queryset.filter(done=status)
+        return queryset
+
 
 class CreateTaskView(LoginRequiredMixin, CreateView):
     """

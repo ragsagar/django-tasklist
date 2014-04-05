@@ -31,11 +31,17 @@
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav">
                             <li>
-                            <form class="navbar-form navbar-left" action="{% url 'create_task' %}">
-                                <button class="btn btn-default">
-                                    <span class="glyphicon glyphicon-plus"></span>
-                                </button>
-                            </form>
+                                <form class="navbar-form navbar-left" action="{% url 'create_task' %}">
+                                    <button class="btn btn-default">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </form>
+                            </li>
+                            <li>
+                                <a href="?done=False">Incomplete Tasks</a>
+                            </li>
+                            <li>
+                            <a href="?done=True">Completed Tasks</a>
                             </li>
                         </ul>
 
