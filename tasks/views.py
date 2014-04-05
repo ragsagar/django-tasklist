@@ -92,3 +92,31 @@ class ToggleTaskDoneView(LoginRequiredMixin, View):
         task.done = not task.done
         task.save()
         return HttpResponseRedirect(task.get_absolute_url())
+
+
+class SetTaskReadyView(LoginRequiredMixin, View):
+    """
+    View to set a task ready for review.
+    """
+    def post(self, request, *args, **kwargs):
+        """
+        Set the task as ready for review.
+        """
+        task = get_object_or_404(Task, pk=self.kwargs.get('pk'))
+        task.status = Task.STATUS_CHOICES.ready_for_review
+        task.save()
+        return HttpResponseRedirect(task.get_absolute_url())
+
+
+class SetTaskIncompleteView(LoginRequiredMixin, View):
+    """
+    View to set a task back to incomplete
+    """
+    def post(self, request, *args, **kwargs):
+        """
+        View to set a task as not ready for review.
+        """
+        task = get_object_or_404(Task, pk=self.kwargs.get('pk'))
+        task.status = Task.STATUS_CHOICES.incomplete
+        task.save()
+        return HttpResponseRedirect(task.get_absolute_url())
