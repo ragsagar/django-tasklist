@@ -47,6 +47,9 @@ class Task(TimeStampedModel):
                                        default=TYPE_CHOICES.task)
     done = models.BooleanField(editable=False, default=False)
 
+    class Meta:
+        ordering = ['-created']
+
     def is_due(self):
         """
         Return True if this task crossed due date, otherwise false.
