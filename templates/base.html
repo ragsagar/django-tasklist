@@ -38,13 +38,13 @@
                                 </form>
                             </li>
                             <li>
-                                <a href="?status=1">Incomplete Tasks</a>
+                            <a href="{% url 'list_tasks' %}?status=1">Incomplete Tasks</a>
                             </li>
                             <li>
-                                <a href="?status=2">Unreviewed Tasks</a>
+                            <a href="{% url 'list_tasks' %}?status=2">Unreviewed Tasks</a>
                             </li>
                             <li>
-                                <a href="?status=3">Completed Tasks</a>
+                            <a href="{% url 'list_tasks' %}?status=3">Completed Tasks</a>
                             </li>
                         </ul>
 
