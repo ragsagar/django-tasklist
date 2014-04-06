@@ -15,6 +15,6 @@ class TaskTable(tables.Table):
     class Meta:
         model = Task
         attrs = {'class': 'table table-condensed rowlink', }
-        fields = ('id', 'title', 'due_date', 'module', 'priority', 'assigned_to', 'type', 'status')
+        fields = ('id', 'title', 'due_date', 'module', 'priority', 'assigned_user', 'type', 'status')
         order_by = '-created'
         per_page = 15
