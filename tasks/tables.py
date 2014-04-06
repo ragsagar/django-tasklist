@@ -5,6 +5,7 @@ from .models import Task
 
 class TaskTable(tables.Table):
     id = tables.LinkColumn('task_detail', args=[A('pk')])
+    created = tables.Column(visible=False)
 
     def render_assigned_user(self, value):
         """
