@@ -6,7 +6,7 @@ from django.views.generic import (ListView, CreateView, DetailView, UpdateView,
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect
 
-from braces.views import LoginRequiredMixin
+from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 from django_tables2.views import SingleTableMixin, SingleTableView
 
 from .models import Task
@@ -118,5 +118,19 @@ class SetTaskIncompleteView(LoginRequiredMixin, View):
         """
         task = get_object_or_404(Task, pk=self.kwargs.get('pk'))
         task.status = Task.STATUS_CHOICES.incomplete
+        task.save()
+        return HttpResponseRedirect(task.get_absolute_url())
+   
+
+class SetTaskCompletedView(LoginRequiredMixin, StaffuserRequiredMixin, View):
+    """
+    View to set a task as completed
+    """
+    def post(self, request, *args, **kwargs):
+        """
+        View to set a task as completed.
+        """
+        task = get_object_or_404(Task, pk=self.kwargs.get('pk'))
+        task.status = Task.STATUS_CHOICES.complete
         task.save()
         return HttpResponseRedirect(task.get_absolute_url())

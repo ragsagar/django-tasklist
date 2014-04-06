@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 
 from .views import (ListTasksView, CreateTaskView, DetailTaskView,
-    UpdateTaskView, ToggleTaskDoneView)
+    UpdateTaskView, ToggleTaskDoneView, SetTaskReadyView, SetTaskIncompleteView, SetTaskCompletedView)
 
 urlpatterns = patterns('',
     url(r'^$', ListTasksView.as_view(), name='list_tasks'),
@@ -17,4 +17,7 @@ urlpatterns = patterns('',
     url(r'^(?P<pk>\d+)/ready/$',
         SetTaskReadyView.as_view(),
         name='set_task_ready'),
+    url(r'^(?P<pk>\d+)/complete/$',
+        SetTaskCompletedView.as_view(),
+        name='set_task_complete'),
 )
