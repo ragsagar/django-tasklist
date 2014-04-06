@@ -80,20 +80,6 @@ class UpdateTaskView(LoginRequiredMixin, UpdateView):
         return super(UpdateTaskView, self).post(request, *args, **kwargs)
 
 
-class ToggleTaskDoneView(LoginRequiredMixin, View):
-    """
-    View to toggle mark a task as done or not done.
-    """
-    def post(self, request, *args, **kwargs):
-        """
-        Get the task object and toggle the done flag.
-        """
-        task = get_object_or_404(Task, pk=self.kwargs.get('pk'))
-        task.done = not task.done
-        task.save()
-        return HttpResponseRedirect(task.get_absolute_url())
-
-
 class SetTaskReadyView(LoginRequiredMixin, View):
     """
     View to set a task ready for review.
