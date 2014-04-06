@@ -51,7 +51,6 @@ class Task(TimeStampedModel):
     status = models.PositiveIntegerField(choices=STATUS_CHOICES,
                                          default=STATUS_CHOICES.incomplete,
                                          editable=False)
-    done = models.BooleanField(editable=False, default=False)
 
     class Meta:
         ordering = ['-created']
