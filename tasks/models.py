@@ -28,7 +28,7 @@ class Task(TimeStampedModel):
                            (3, 'task', 'Task'),
                            (4, 'proposal', 'Proposal'))
     STATUS_CHOICES = Choices((1, 'incomplete', 'Incomplete'),
-                             (2, 'read_for_review', 'Ready for Review'),
+                             (2, 'ready_for_review', 'Ready for Review'),
                              (3, 'complete', 'Complete'))
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL,
                                    null=True,
@@ -70,6 +70,33 @@ class Task(TimeStampedModel):
         Check if the task due date is today
         """
         if self.due_date == timezone.now().date():
+            return True
+        else:
+            return False
+
+    def is_complete(self):
+        """
+        Returns True if the task is marked as completed.
+        """
+        if self.status == self.STATUS_CHOICES.complete:
+            return True
+        else:
+            return False
+
+    def is_ready_for_review(self):
+        """
+        Returns True if the task is marked as ready for review.
+        """
+        if self.status == self.STATUS_CHOICES.ready_for_review:
+            return True
+        else:
+            return False
+
+    def is_incomplete(self):
+        """
+        Returns True if the task is marked as not completed.
+        """
+        if self.status == self.STATUS_CHOICES.incomplete:
             return True
         else:
             return False
