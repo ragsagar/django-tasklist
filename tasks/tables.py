@@ -1,3 +1,5 @@
+from django.utils.safestring import mark_safe
+
 import django_tables2 as tables
 from django_tables2.utils import A
 
@@ -12,6 +14,21 @@ class TaskTable(tables.Table):
         Show full name if available.
         """
         return value.get_full_name() or value
+
+    def render_status(self, value, record):
+        """
+        Show icons instead of show status display text.
+        """
+        symbol_map = {
+                Task.STATUS_CHOICES.complete: 'ok',
+                Task.STATUS_CHOICES.incomplete: 'minus-sign',
+                Task.STATUS_CHOICES.ready_for_review: 'thumbs-up'
+                }
+        symbol_html = "<span class='glyphicon glyphicon-{}'></span>"
+        # Using record.status as `value` will contain the get_status_display()
+        # result.
+        symbol_html = symbol_html.format(symbol_map[record.status])
+        return mark_safe(symbol_html)
 
     class Meta:
         model = Task
