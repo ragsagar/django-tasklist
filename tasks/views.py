@@ -5,6 +5,7 @@ from django.views.generic import (ListView, CreateView, DetailView, UpdateView,
     View)
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect
+from django.utils import timezone
 
 from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 from django_tables2.views import SingleTableMixin, SingleTableView
@@ -90,6 +91,7 @@ class SetTaskReadyView(LoginRequiredMixin, View):
         """
         task = get_object_or_404(Task, pk=self.kwargs.get('pk'))
         task.status = Task.STATUS_CHOICES.ready_for_review
+        task.completed_at = timezone.now()
         task.save()
         return HttpResponseRedirect(task.get_absolute_url())
 
@@ -118,5 +120,6 @@ class SetTaskCompletedView(LoginRequiredMixin, StaffuserRequiredMixin, View):
         """
         task = get_object_or_404(Task, pk=self.kwargs.get('pk'))
         task.status = Task.STATUS_CHOICES.complete
+        task.reviewed_by = request.user
         task.save()
         return HttpResponseRedirect(task.get_absolute_url())
