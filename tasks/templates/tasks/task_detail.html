@@ -52,16 +52,26 @@
                 <td><strong>Module</strong></td><td>{{ task.module }}</td>
             </tr>
             <tr>
-                <td><strong>State</strong></td>
+                <td><strong>Status</strong></td>
                 <td>
-                <form action="{% url 'toggle_task_done' pk=task.pk %}" method="post">
-                    {% csrf_token %}
-                {% if task.done %} 
-                    <button type="submit" class="btn btn-default btn-xs">Mark as not done</button>
-                {% else %}
-                    <button type="submit" class="btn btn-default btn-xs">Mark as done</button>
+                    {{ task.get_status_display }}
+                {% if task.is_incomplete %}
+                    <form action="{% url 'set_task_ready' pk=task.pk %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-default btn-xs">Ready for Review</button>
+                    </form>
+                {% elif task.is_ready_for_review %}
+                    <form action="{% url 'set_task_incomplete' pk=task.pk %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-default btn-xs">Mark as Incomplete</button>
+                    </form>
                 {% endif %}
-                </form>
+                {% if user.is_staff and not task.is_complete %}
+                    <form action="{% url 'set_task_complete' pk=task.pk %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-default btn-xs">Mark as Completed</button>
+                    </form>
+                {% endif %}
                 </td>
             </tr>
             </tbody>
