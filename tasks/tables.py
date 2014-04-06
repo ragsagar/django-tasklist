@@ -17,4 +17,4 @@ class TaskTable(tables.Table):
         attrs = {'class': 'table table-condensed rowlink', }
         exclude = ('last_modified', 'created_by', 'created', 'description')
         order_by = '-created'
-        per_page = 20
+        per_page = 15
