@@ -51,6 +51,15 @@ class Task(TimeStampedModel):
     status = models.PositiveIntegerField(choices=STATUS_CHOICES,
                                          default=STATUS_CHOICES.incomplete,
                                          editable=False)
+    # Time at which user submitted it for review
+    completed_at = models.DateTimeField(null=True,
+                                        blank=True,
+                                        editable=False)
+    reviewed_by = models.ForeignKey(settings.AUTH_USER_MODEL,
+                                    null=True,
+                                    blank=True,
+                                    editable=False,
+                                    related_name='reviewed_tasks')
 
     class Meta:
         ordering = ['-created']
