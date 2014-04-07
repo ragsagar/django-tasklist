@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.comments',
+    'django.contrib.humanize',
     'crispy_forms',
     'django_tables2',
     'tasks',
