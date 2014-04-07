@@ -9,6 +9,13 @@ class TaskTable(tables.Table):
     id = tables.LinkColumn('task_detail', args=[A('pk')])
     created = tables.Column(visible=False)
 
+    def render_due_date(self, value, record):
+        if record.is_due():
+            symbol = " <span class='glyphicon glyphicon-thumbs-down'></span>"
+        else:
+            symbol = ""
+        return mark_safe(value.strftime("%b %d, %Y") + symbol)
+
     def render_assigned_user(self, value):
         """
         Show full name if available.
