@@ -68,7 +68,7 @@ class Task(TimeStampedModel):
         """
         Return True if this task crossed due date, otherwise false.
         """
-        if self.due_date < timezone.now().date():
+        if not self.is_complete() and self.due_date < timezone.now().date():
             return True
         else:
             return False
