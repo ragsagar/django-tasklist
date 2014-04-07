@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 {% load comments %}
 {% load crispy_forms_tags %}
+{% load humanize %}
 
 {% block content %}
 
-{% if not task.done %}
+{% if not task.is_complete %}
     {% if task.is_due %}
     <div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -17,14 +18,9 @@
         <strong>Quick!</strong> This task needs to be done today!
     </div>
     {% endif %}
-{% else %}
-    <div class="alert alert-success alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        This is a completed task!
-    </div>
 {% endif %}
 
-<div class="panel panel-info">
+<div class="panel panel-{% if task.is_complete %}success{% elif task.is_due %}warning{% else %}info{% endif %}">
     <div class="panel-heading">
         {{ task.title }} 
         <a href="{% url 'edit_task' pk=task.pk %}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-edit"></span></a>
@@ -37,7 +33,7 @@
                 <td><strong>Description</strong></td><td>{{ task.description }}</td>
             </tr>
             <tr>
-                <td><strong>Due date</strong></td><td>{{ task.due_date }}</td>
+                <td><strong>Due date</strong></td><td>{{ task.due_date|naturalday }}</td>
             </tr>
             <tr>
                 <td><strong>Created by</strong></td><td>{{ task.created_by.get_full_name|default:task.created_by }}</td>
@@ -74,6 +70,19 @@
                 {% endif %}
                 </td>
             </tr>
+            {% if task.is_ready_for_review or task.is_complete %}
+            <tr>
+                <td><strong>Completed at</strong></td><td>{{ task.completed_at|naturaltime }}</td>
+            </tr>
+            {% endif %}
+            {% if task.is_complete %}
+            <tr>
+                <td><strong>Reviewed by</strong></td><td>{{ task.reviewed_by }}</td>
+            </tr>
+            <!--<tr>-->
+                <!--<td><strong>Reviewed at</strong></td><td>{{ task.reviewed_at }}</td>-->
+            <!--</tr>-->
+            {% endif %}
             </tbody>
         </table>
     </div>
