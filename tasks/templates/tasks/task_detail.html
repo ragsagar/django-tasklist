@@ -95,7 +95,7 @@
         {% for comment in comment_list %}
             <div class="panel">
                 <div class="panel-footer">
-                    #{{ forloop.counter }} {{ comment.user.get_full_name|default:comment.user }} at {{ comment.submit_date }}
+                    #{{ forloop.counter }} {{ comment.user.get_full_name|default:comment.user }} at {{ comment.submit_date|naturaltime }}
                 </div>
                 <div class="panel-body">
                     <a name="c{{ comment.id }}"></a>
