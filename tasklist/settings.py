@@ -7,7 +7,7 @@ https://docs.djangoproject.com/en/1.6/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse_lazy
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
@@ -113,8 +113,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
          "django.core.context_processors.request",
         )
 
-LOGIN_URL = reverse('login')
+LOGIN_URL = reverse_lazy('login')
 
-LOGIN_REDIRECT_URL = reverse('list_tasks')
+LOGIN_REDIRECT_URL = reverse_lazy('list_tasks')
 
 SITE_ID = 1
