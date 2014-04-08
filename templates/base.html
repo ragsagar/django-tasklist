@@ -41,7 +41,9 @@
                             <a href="{% url 'list_tasks' %}?status=1"><span class='glyphicon glyphicon-minus-sign'></span> Incomplete Tasks</a>
                             </li>
                             <li>
-                            <a href="{% url 'list_tasks' %}?status=2"><span class='glyphicon glyphicon-thumbs-up'></span> Unreviewed Tasks</a>
+                                <a href="{% url 'list_tasks' %}?status=2">
+                                    <span class='glyphicon glyphicon-thumbs-up'></span>Unreviewed Tasks <span class="badge alert-info">{{ unreviewed_task_count }}</span>
+                                </a>
                             </li>
                             <li>
                             <a href="{% url 'list_tasks' %}?status=3"><span class='glyphicon glyphicon-ok'></span>Completed Tasks</a>
