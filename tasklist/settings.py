@@ -111,6 +111,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
          "django.core.context_processors.static",
          "django.core.context_processors.tz",
          "django.core.context_processors.request",
+         "tasks.context_processors.task_count"
         )
 
 LOGIN_URL = reverse_lazy('login')
