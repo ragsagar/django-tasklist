@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
 from django.utils import timezone
+from django.forms.util import to_current_timezone
 
 from model_utils import Choices
 
@@ -68,7 +69,10 @@ class Task(TimeStampedModel):
         """
         Return True if this task crossed due date, otherwise false.
         """
-        if not self.is_complete() and self.due_date < timezone.now().date():
+        # Convert to current tz, otherwise we are comparing with utc. the date
+        # will be entered respect to our current tz
+        date_now = to_current_timezone(timezone.now()).date()
+        if not self.is_complete() and self.due_date < date_now:
             return True
         else:
             return False
@@ -77,7 +81,8 @@ class Task(TimeStampedModel):
         """
         Check if the task due date is today
         """
-        if self.due_date == timezone.now().date():
+        date_now = to_current_timezone(timezone.now()).date()
+        if self.due_date == date_now:
             return True
         else:
             return False
