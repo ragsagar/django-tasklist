@@ -42,7 +42,8 @@
                             </li>
                             <li>
                                 <a href="{% url 'list_tasks' %}?status=2">
-                                    <span class='glyphicon glyphicon-thumbs-up'></span>Unreviewed Tasks <span class="badge alert-info">{{ unreviewed_task_count }}</span>
+                                    <span class='glyphicon glyphicon-thumbs-up'></span>Unreviewed Tasks 
+                                    {% if unreviewed_task_count %}<span class="badge alert-info">{{ unreviewed_task_count }}</span>{% endif %}
                                 </a>
                             </li>
                             <li>
