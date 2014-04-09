@@ -114,6 +114,8 @@ class SetTaskCompletedView(LoginRequiredMixin, StaffuserRequiredMixin, View):
     """
     View to set a task as completed
     """
+    raise_exception = True
+
     def post(self, request, *args, **kwargs):
         """
         View to set a task as completed.
