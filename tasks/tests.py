@@ -13,7 +13,6 @@ class TaskTestCase(TestCase):
         data =  {
                 'created_by': user,
                 'title': 'Test task 1',
-                'done': False,
                 'priority': 1,
                 'module': 'CRM',
                 'due_date': datetime.date(2014, 4, 2),
@@ -33,6 +32,9 @@ class TaskTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         tasks = Task.objects.all()
         self.assertEqual(len(response.context_data['task_list']), tasks.count())
+        self.assertTemplateUsed(response, 'tasks/task_list.html')
+        self.assertIn(str(self.task.get_absolute_url()),
+                      response.rendered_content)
 
     def test_detail_task_view(self):
         """
@@ -42,6 +44,7 @@ class TaskTestCase(TestCase):
         response = self.client.get(detail_url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context_data['task'], self.task)
+        self.assertTemplateUsed(response, 'tasks/task_detail.html')
 
     def test_create_task_view(self):
         """
@@ -50,6 +53,7 @@ class TaskTestCase(TestCase):
         create_task_url = reverse('create_task')
         response = self.client.get(create_task_url)
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'tasks/task_form.html')
         user = User.objects.get(username='ragsagar')
         data =  {
                 'title': 'Test task 2',
@@ -60,7 +64,8 @@ class TaskTestCase(TestCase):
                 'description': 'This is a description',
                 'assigned_user_id': user.pk,
                 }
+        old_count = Task.objects.all().count()
         response = self.client.post(create_task_url, data)
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(Task.objects.all().count(), 2)
+        self.assertEqual(Task.objects.all().count(), old_count+1)
         
