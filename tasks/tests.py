@@ -9,19 +9,27 @@ from .models import Task
 
 class TaskTestCase(TestCase):
     def setUp(self):
-        user = User.objects.create_user(username='ragsagar', password='password')
+        self.user = self.create_user()
         data =  {
-                'created_by': user,
+                'created_by': self.user,
                 'title': 'Test task 1',
                 'priority': 1,
                 'module': 'CRM',
                 'due_date': datetime.date(2014, 4, 2),
                 'type': 3,
                 'description': 'testing task',
-                'assigned_user': user,
+                'assigned_user': self.user,
                 }
         self.task = Task.objects.create(**data)
         self.client.login(username='ragsagar', password='password')
+
+    def create_user(self, **kwargs):
+        user_data = {}
+        user_data['username'] = 'ragsagar'
+        user_data['password'] = 'password'
+        user_data.update(kwargs)
+        user = User.objects.create_user(**user_data)
+        return user
 
     def test_list_tasks_view(self):
         """
@@ -69,3 +77,55 @@ class TaskTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Task.objects.all().count(), old_count+1)
         
+    def test_set_task_ready_view(self):
+        """
+        Test the view to set task status as ready to be reviewed.
+        """
+        self.task.status = Task.STATUS_CHOICES.incomplete
+        self.task.save()
+        pk = self.task.pk
+        url = reverse('set_task_ready', kwargs={'pk': pk})
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 302)
+        task = Task.objects.get(pk=pk)
+        self.assertEqual(task.status, Task.STATUS_CHOICES.ready_for_review)
+        self.assertIsNotNone(task.completed_at)
+
+    def test_set_task_incomplete_view(self):
+        """
+        Test the view to set task status as incomplete.
+        """
+        self.task.status = Task.STATUS_CHOICES.ready_for_review
+        self.task.save()
+        pk = self.task.pk
+        url = reverse('set_task_incomplete', kwargs={'pk': pk})
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 302)
+        task = Task.objects.get(pk=pk)
+        self.assertEqual(task.status, Task.STATUS_CHOICES.incomplete)
+
+    def test_set_task_complete_view(self):
+        """
+        Test the view to set task status as complete
+        """
+        self.task.status = Task.STATUS_CHOICES.ready_for_review
+        self.task.save()
+        pk = self.task.pk
+        url = reverse('set_task_complete', kwargs={'pk': pk})
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 403)
+        task = Task.objects.get(pk=pk)
+        self.assertIsNone(task.reviewed_by)
+        self.assertEqual(task.status, Task.STATUS_CHOICES.ready_for_review)
+        # Create a staff user and login as staff user
+        staff_user = self.create_user(username='staff_user',
+                                      password='password',)
+        staff_user.is_staff = True
+        staff_user.save()
+        self.client.login(username='staff_user', password='password')
+
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 302)
+        task = Task.objects.get(pk=pk)
+        self.assertEqual(task.reviewed_by, staff_user)
+        self.assertEqual(task.status, Task.STATUS_CHOICES.complete)
