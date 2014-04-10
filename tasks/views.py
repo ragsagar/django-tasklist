@@ -14,25 +14,56 @@ from .models import Task
 from .tables import TaskTable
 
 
-class ListTasksView(LoginRequiredMixin, SingleTableView):
+class BaseListTasksView(LoginRequiredMixin, SingleTableView):
     """
-    View to list all tasks.
+    The base view that can list all tasks. Other actual view will apply just
+    filters on this.
     """
     model = Task
     table_class = TaskTable
+    filters = {}
+    exclude_filters = {}
 
     def get_queryset(self):
         """
-        To filter for complete and incomplete tasks.
+        Exclude completed tasks from normal listing.
         """
-        queryset = super(ListTasksView, self).get_queryset()
-        status = self.request.GET.get('status')
-        if status:
-            return queryset.filter(status=status)
-        else:
-            return queryset.exclude(status=Task.STATUS_CHOICES.complete)
+        queryset = super(BaseListTasksView, self).get_queryset()
+        if self.filters:
+            queryset = queryset.filter(**self.filters)
+        if self.exclude_filters:
+            queryset = queryset.exclude(**self.exclude_filters)
+        return queryset
 
 
+class ListTasksView(BaseListTasksView):
+    """
+    View to list all tasks excluding 
+    """
+    exclude_filters = {'status': Task.STATUS_CHOICES.complete}
+
+
+class ListIncompleteTasksView(BaseListTasksView):
+    """
+    View to list just incomplete tasks.
+    """
+    filters = {'status': Task.STATUS_CHOICES.incomplete}
+
+
+class ListUnReviewedTasksView(BaseListTasksView):
+    """
+    View to list only the tasks that are ready to be reviewed
+    """
+    filters = {'status': Task.STATUS_CHOICES.ready_for_review}
+
+
+class ListCompletedTasksView(BaseListTasksView):
+    """
+    View to list only the tasks that are completed.
+    """
+    filters = {'status': Task.STATUS_CHOICES.complete}
+        
+    
 class CreateTaskView(LoginRequiredMixin, CreateView):
     """
     View to create new tasks.
