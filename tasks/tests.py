@@ -55,6 +55,61 @@ class TaskTestCase(TestCase):
         self.assertIn(str(self.task.get_absolute_url()),
                       response.rendered_content)
 
+    def test_list_incomplete_tasks_view(self):
+        """
+        Tests for the view to list all tasks.
+        """
+        list_tasks_url = reverse('list_incomplete_tasks')
+        response = self.client.get(list_tasks_url)
+        self.assertEqual(response.status_code, 200)
+        tasks = Task.objects.filter(status=Task.STATUS_CHOICES.incomplete)
+        self.assertEqual(len(response.context_data['task_list']), tasks.count())
+        status_of_all_tasks = response.context_data['task_list'].values_list(
+                                                            'status',
+                                                            flat=True)
+        self.assertNotIn(Task.STATUS_CHOICES.complete, status_of_all_tasks)
+        self.assertNotIn(Task.STATUS_CHOICES.ready_for_review,
+                         status_of_all_tasks)
+        self.assertTemplateUsed(response, 'tasks/task_list.html')
+        self.assertIn(str(self.task.get_absolute_url()),
+                      response.rendered_content)
+
+    def test_list_unreviewed_tasks_view(self):
+        """
+        Tests for the view to list all tasks.
+        """
+        list_tasks_url = reverse('list_unreviewed_tasks')
+        response = self.client.get(list_tasks_url)
+        self.assertEqual(response.status_code, 200)
+        tasks = Task.objects.filter(status=Task.STATUS_CHOICES.ready_for_review)
+        self.assertEqual(len(response.context_data['task_list']), tasks.count())
+        status_of_all_tasks = response.context_data['task_list'].values_list(
+                                                            'status',
+                                                            flat=True)
+        self.assertNotIn(Task.STATUS_CHOICES.complete, status_of_all_tasks)
+        self.assertNotIn(Task.STATUS_CHOICES.incomplete, status_of_all_tasks)
+        self.assertTemplateUsed(response, 'tasks/task_list.html')
+        self.assertNotIn(str(self.task.get_absolute_url()),
+                         response.rendered_content)
+
+    def test_list_completed_tasks_view(self):
+        """
+        Tests for the view to list all tasks.
+        """
+        list_tasks_url = reverse('list_completed_tasks')
+        response = self.client.get(list_tasks_url)
+        self.assertEqual(response.status_code, 200)
+        tasks = Task.objects.filter(status=Task.STATUS_CHOICES.complete)
+        self.assertEqual(len(response.context_data['task_list']), tasks.count())
+        status_of_all_tasks = response.context_data['task_list'].values_list(
+                                                            'status',
+                                                            flat=True)
+        self.assertNotIn(Task.STATUS_CHOICES.ready_for_review, status_of_all_tasks)
+        self.assertNotIn(Task.STATUS_CHOICES.incomplete, status_of_all_tasks)
+        self.assertTemplateUsed(response, 'tasks/task_list.html')
+        self.assertNotIn(str(self.task.get_absolute_url()),
+                         response.rendered_content)
+
     def test_detail_task_view(self):
         """
         Test detail task view page.
