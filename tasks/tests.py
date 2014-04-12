@@ -10,18 +10,26 @@ from .models import Task
 class TaskTestCase(TestCase):
     def setUp(self):
         self.user = self.create_user()
+        self.client.login(username='ragsagar', password='password')
+        self.task = self.create_task()
+        self.create_task(title="Completed Task",
+                         status=Task.STATUS_CHOICES.complete)
+        self.create_task(title="Task Ready for Review",
+                         status=Task.STATUS_CHOICES.ready_for_review)
+
+    def create_task(self, title="Test task", status=1, priority=1):
         data =  {
                 'created_by': self.user,
-                'title': 'Test task 1',
-                'priority': 1,
+                'title': title,
+                'priority': priority,
                 'module': 'CRM',
                 'due_date': datetime.date(2014, 4, 2),
                 'type': 3,
                 'description': 'testing task',
                 'assigned_user': self.user,
+                'status': status,
                 }
-        self.task = Task.objects.create(**data)
-        self.client.login(username='ragsagar', password='password')
+        return Task.objects.create(**data)
 
     def create_user(self, **kwargs):
         user_data = {}
@@ -38,8 +46,11 @@ class TaskTestCase(TestCase):
         list_tasks_url = reverse('list_tasks')
         response = self.client.get(list_tasks_url)
         self.assertEqual(response.status_code, 200)
-        tasks = Task.objects.all()
+        tasks = Task.objects.all().exclude(status=Task.STATUS_CHOICES.complete)
         self.assertEqual(len(response.context_data['task_list']), tasks.count())
+        self.assertNotIn(
+            Task.STATUS_CHOICES.complete,
+            response.context_data['task_list'].values_list('status', flat=True))
         self.assertTemplateUsed(response, 'tasks/task_list.html')
         self.assertIn(str(self.task.get_absolute_url()),
                       response.rendered_content)
