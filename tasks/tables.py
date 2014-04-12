@@ -20,7 +20,7 @@ PRIORTY_BADGE_MAP = {
 
 class TaskTable(tables.Table):
     id = tables.LinkColumn('task_detail', args=[A('pk')])
-    created = tables.Column(visible=False)
+    #created = tables.Column(visible=False)
 
     def render_due_date(self, value, record):
         """
@@ -59,5 +59,5 @@ class TaskTable(tables.Table):
         model = Task
         attrs = {'class': 'table table-condensed rowlink', }
         fields = ('id', 'title', 'due_date', 'module', 'priority', 'assigned_user', 'type', 'status')
-        order_by = '-created'
+        order_by = 'due_date'
         per_page = 15
