@@ -33,7 +33,7 @@ class BaseListTasksView(LoginRequiredMixin, SingleTableView):
             queryset = queryset.filter(**self.filters)
         if self.exclude_filters:
             queryset = queryset.exclude(**self.exclude_filters)
-        return queryset
+        return queryset.select_related('assigned_user')
 
 
 class ListTasksView(BaseListTasksView):
