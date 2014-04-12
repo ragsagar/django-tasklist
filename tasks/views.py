@@ -7,14 +7,15 @@ from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.utils import timezone
 
-from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
+from braces.views import (LoginRequiredMixin, StaffuserRequiredMixin,
+        StaticContextMixin)
 from django_tables2.views import SingleTableMixin, SingleTableView
 
 from .models import Task
 from .tables import TaskTable
 
 
-class BaseListTasksView(LoginRequiredMixin, SingleTableView):
+class BaseListTasksView(LoginRequiredMixin,  SingleTableView):
     """
     The base view that can list all tasks. Other actual view will apply just
     filters on this.
@@ -43,25 +44,28 @@ class ListTasksView(BaseListTasksView):
     exclude_filters = {'status': Task.STATUS_CHOICES.complete}
 
 
-class ListIncompleteTasksView(BaseListTasksView):
+class ListIncompleteTasksView(StaticContextMixin, BaseListTasksView):
     """
     View to list just incomplete tasks.
     """
     filters = {'status': Task.STATUS_CHOICES.incomplete}
+    static_context = {"incomplete_menu": True}
 
 
-class ListUnReviewedTasksView(BaseListTasksView):
+class ListUnReviewedTasksView(StaticContextMixin, BaseListTasksView):
     """
     View to list only the tasks that are ready to be reviewed
     """
     filters = {'status': Task.STATUS_CHOICES.ready_for_review}
+    static_context = {"unreviewed_menu": True}
 
 
-class ListCompletedTasksView(BaseListTasksView):
+class ListCompletedTasksView(StaticContextMixin, BaseListTasksView):
     """
     View to list only the tasks that are completed.
     """
     filters = {'status': Task.STATUS_CHOICES.complete}
+    static_context = {"completed_menu": True}
         
     
 class CreateTaskView(LoginRequiredMixin, CreateView):
