@@ -6,6 +6,11 @@ var json_response = $.getJSON('/tasks/report/task_by_status/json', function(resp
 	// geting the data form backend
 	creat_pie_chart(response.task_by_status);
 	creat_rectangular_pie_chart(response.task_by_module);
+	$(window).resize(function() {
+		// call the methods angain when screen is get resized.
+		creat_pie_chart(response.task_by_status);
+		creat_rectangular_pie_chart(response.task_by_module);
+	})
 })
 
 
@@ -42,6 +47,7 @@ function creat_pie_chart(data) {
 	});
 }
 function creat_rectangular_pie_chart(data) {
+	// function to draw the rectangular pie chart
 	$.plot('.module_chart', data, {
 	    series: {
 	        pie: {
