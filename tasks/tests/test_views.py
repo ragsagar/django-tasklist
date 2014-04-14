@@ -7,7 +7,7 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 
-from .models import Task
+from ..models import Task
 
 
 class TaskTestCase(TestCase):
@@ -199,6 +199,7 @@ class TaskTestCase(TestCase):
         self.assertEqual(task.reviewed_by, staff_user)
         self.assertEqual(task.status, Task.STATUS_CHOICES.complete)
 
+
     def test_report_home_view(self):
         """
         Test the report home view
@@ -235,11 +236,4 @@ class TaskTestCase(TestCase):
         self.assertEqual(data.get('task_by_status'), tasks_by_status)
         self.assertEqual(data.get('task_by_module'), tasks_by_module)
         
-
-
-
-
-
-
-
 
