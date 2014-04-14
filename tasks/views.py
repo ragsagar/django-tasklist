@@ -181,6 +181,7 @@ class ReportHomeView(LoginRequiredMixin, TemplateView):
         context['incomplete_task_count'] = incomplete_tasks.count()
         context['unreviewed_tasks_count'] = unreviewed_tasks.count()
         context['completed_tasks'] = completed_tasks.count()
+        context['report_menu'] = True
         return context
 
 class TasksByStatusJsonView(LoginRequiredMixin, JSONResponseMixin, View):
