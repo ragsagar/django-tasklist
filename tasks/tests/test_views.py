@@ -232,8 +232,6 @@ class TaskTestCase(TestCase):
         
         json_string = response.content
         data = json.loads(json_string)
-        data.get('task_by_status')
         self.assertEqual(data.get('task_by_status'), tasks_by_status)
         self.assertEqual(data.get('task_by_module'), tasks_by_module)
         
-
