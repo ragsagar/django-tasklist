@@ -1,4 +1,5 @@
 import json
+from django.db.models import Count
 
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import (ListView, CreateView, DetailView, UpdateView,
@@ -191,6 +192,29 @@ class TasksByStatusJsonView(LoginRequiredMixin, JSONResponseMixin, View):
         Get all task and return a json data of tasks 
         by its status
         """
-        return HttpResponse()
+        tasks = Task.objects.all()
+        tasks_by_status = (
+            tasks.values('status'
+                         ).annotate(count=Count('status')
+                         ).order_by('-count'))
+        for item in tasks_by_status:
+            item['label'] = Task.STATUS_CHOICES[item.get('status')]
+            item['data'] = item.get('count')
+            del item['status']
+            del item['count']
+        task_by_module = (
+            tasks.values('module'
+                         ).annotate(count=Count('module')
+                         ).order_by('-count'))
+        for item in task_by_module:
+            item['label'] = item.get('module')
+            item['data'] = item.get('count')
+            del item['module']
+            del item['count']
+        response = {
+            'task_by_status' : list(tasks_by_status),
+            'task_by_module' : list(task_by_module)
+        }
+        return self.render_json_response(response)
 
 
