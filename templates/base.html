@@ -72,6 +72,7 @@
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
         <script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
         <script src="{% static 'js/jasny-bootstrap.min.js' %}"></script>
+        <script src="{% static 'js/jquery_knob/jquery.knob.js' %}"></script>
     </body>
 
     <script type="text/javascript">
@@ -79,7 +80,9 @@
         $('.dateinput').datepicker();
         $('.logout-button').tooltip();
         $('table.rowlink').rowlink()
-
+        $(function() {
+            $('.dial').knob();
+        })
         {% block js %}
         {% endblock %}
     });
