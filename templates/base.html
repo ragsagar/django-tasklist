@@ -73,6 +73,9 @@
         <script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
         <script src="{% static 'js/jasny-bootstrap.min.js' %}"></script>
         <script src="{% static 'js/jquery_knob/jquery.knob.js' %}"></script>
+        <script src="{% static 'js/flot/jquery.flot.min.js' %}"></script>
+        <script src="{% static 'js/flot/jquery.flot.pie.js' %}"></script>
+        <script src="{% static 'js/main.js' %}"></script>
     </body>
 
     <script type="text/javascript">
@@ -80,9 +83,6 @@
         $('.dateinput').datepicker();
         $('.logout-button').tooltip();
         $('table.rowlink').rowlink()
-        $(function() {
-            $('.dial').knob();
-        })
         {% block js %}
         {% endblock %}
     });
