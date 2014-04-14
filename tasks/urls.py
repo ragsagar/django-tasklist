@@ -2,7 +2,8 @@ from django.conf.urls import patterns, include, url
 
 from .views import (ListTasksView, CreateTaskView, DetailTaskView,
     UpdateTaskView, SetTaskReadyView, SetTaskIncompleteView, SetTaskCompletedView,
-    ListIncompleteTasksView, ListUnReviewedTasksView, ListCompletedTasksView)
+    ListIncompleteTasksView, ListUnReviewedTasksView, ListCompletedTasksView,
+    ReportHomeView, TasksByStatusJsonView)
 
 urlpatterns = patterns('',
     url(r'^$', ListTasksView.as_view(), name='list_tasks'),
@@ -27,4 +28,10 @@ urlpatterns = patterns('',
     url(r'^(?P<pk>\d+)/complete/$',
         SetTaskCompletedView.as_view(),
         name='set_task_complete'),
+    url(r'report/$',
+        ReportHomeView.as_view(),
+        name='report_home'),
+    url(r'report/task_by_status/json',
+        TasksByStatusJsonView.as_view(),
+        name='task_by_status_json')
 )

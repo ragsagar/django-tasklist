@@ -2,13 +2,13 @@ import json
 
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import (ListView, CreateView, DetailView, UpdateView,
-    View)
+    TemplateView, View)
 from django.core.urlresolvers import reverse_lazy
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.utils import timezone
 
 from braces.views import (LoginRequiredMixin, StaffuserRequiredMixin,
-        StaticContextMixin)
+        StaticContextMixin, JSONResponseMixin)
 from django_tables2.views import SingleTableMixin, SingleTableView
 
 from .models import Task
@@ -161,3 +161,36 @@ class SetTaskCompletedView(LoginRequiredMixin, StaffuserRequiredMixin, View):
         task.reviewed_by = request.user
         task.save()
         return HttpResponseRedirect(task.get_absolute_url())
+
+class ReportHomeView(LoginRequiredMixin, TemplateView):
+    """
+    View to render template for report home view
+    """
+    template_name = 'tasks/report.html'
+
+    def get_context_data(self, **kwargs):
+        """
+        Adding some data to the context
+        """
+        context = super(ReportHomeView, self).get_context_data(**kwargs)
+        tasks = Task.objects.all()
+        incomplete_tasks = tasks.filter(status=Task.STATUS_CHOICES.incomplete)
+        unreviewed_tasks = tasks.filter(status=Task.STATUS_CHOICES.ready_for_review)
+        completed_tasks = tasks.filter(status=Task.STATUS_CHOICES.complete)
+        context['incomplete_task_count'] = incomplete_tasks.count()
+        context['unreviewed_tasks_count'] = unreviewed_tasks.count()
+        context['completed_tasks'] = completed_tasks.count()
+        return context
+
+class TasksByStatusJsonView(LoginRequiredMixin, JSONResponseMixin, View):
+    """
+    Returns the task by its status
+    """
+    def get(self, request, *args, **kwargs):
+        """
+        Get all task and return a json data of tasks 
+        by its status
+        """
+        return HttpResponse()
+
+
