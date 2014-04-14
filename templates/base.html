@@ -43,12 +43,15 @@
                             </li>
                             <li {% if unreviewed_menu %}class="active"{% endif %}>
                                 <a href="{% url 'list_unreviewed_tasks' %}">
-                                    <span class='glyphicon glyphicon-thumbs-up'></span>Unreviewed Tasks 
+                                    <span class='glyphicon glyphicon-thumbs-up'></span> Unreviewed Tasks 
                                     {% if unreviewed_task_count %}<span class="badge alert-info">{{ unreviewed_task_count }}</span>{% endif %}
                                 </a>
                             </li>
                             <li {% if completed_menu %}class="active"{% endif %}>
-                            <a href="{% url 'list_completed_tasks' %}"><span class='glyphicon glyphicon-ok'></span>Completed Tasks</a>
+                            <a href="{% url 'list_completed_tasks' %}"><span class='glyphicon glyphicon-ok'></span> Completed Tasks</a>
+                            </li>
+                            <li {% if report_menu %}class="active"{% endif %}>
+                            <a href="{% url 'report_home' %}"><span class='glyphicon glyphicon-stats'></span> Reports</a>
                             </li>
                         </ul>
 
