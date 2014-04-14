@@ -3,7 +3,7 @@ from django.conf.urls import patterns, include, url
 from .views import (ListTasksView, CreateTaskView, DetailTaskView,
     UpdateTaskView, SetTaskReadyView, SetTaskIncompleteView, SetTaskCompletedView,
     ListIncompleteTasksView, ListUnReviewedTasksView, ListCompletedTasksView,
-    ReportHomeView, TasksByStatusJsonView)
+    ReportHomeView, TasksJsonView)
 
 urlpatterns = patterns('',
     url(r'^$', ListTasksView.as_view(), name='list_tasks'),
@@ -32,6 +32,6 @@ urlpatterns = patterns('',
         ReportHomeView.as_view(),
         name='report_home'),
     url(r'report/task_by_status/json',
-        TasksByStatusJsonView.as_view(),
+        TasksJsonView.as_view(),
         name='task_by_status_json')
 )

@@ -1,5 +1,4 @@
 import json
-from django.db.models import Count
 
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import (ListView, CreateView, DetailView, UpdateView,
@@ -7,6 +6,7 @@ from django.views.generic import (ListView, CreateView, DetailView, UpdateView,
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils import timezone
+from django.db.models import Count
 
 from braces.views import (LoginRequiredMixin, StaffuserRequiredMixin,
         StaticContextMixin, JSONResponseMixin)
@@ -184,7 +184,7 @@ class ReportHomeView(LoginRequiredMixin, TemplateView):
         context['report_menu'] = True
         return context
 
-class TasksByStatusJsonView(LoginRequiredMixin, JSONResponseMixin, View):
+class TasksJsonView(LoginRequiredMixin, JSONResponseMixin, View):
     """
     Returns the task by its status
     """
