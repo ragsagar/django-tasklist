@@ -1,4 +1,7 @@
 import datetime
+import json
+
+from django.db.models import Count
 
 from django.test import TestCase
 from django.core.urlresolvers import reverse
@@ -195,3 +198,48 @@ class TaskTestCase(TestCase):
         task = Task.objects.get(pk=pk)
         self.assertEqual(task.reviewed_by, staff_user)
         self.assertEqual(task.status, Task.STATUS_CHOICES.complete)
+
+    def test_report_home_view(self):
+        """
+        Test the report home view
+        """
+        url = reverse('report_home')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        tasks = Task.objects.all()
+        incomplete_tasks_count = tasks.filter(status=Task.STATUS_CHOICES.incomplete).count()
+        unreviewed_tasks_count = tasks.filter(status=Task.STATUS_CHOICES.ready_for_review).count()
+        completed_tasks_count = tasks.filter(status=Task.STATUS_CHOICES.complete).count()
+        self.assertEqual(response.context_data['incomplete_task_count'], incomplete_tasks_count)
+        self.assertEqual(response.context_data['unreviewed_tasks_count'], unreviewed_tasks_count)
+        self.assertEqual(response.context_data['unreviewed_tasks_count'], completed_tasks_count)
+
+    def test_tasks_json_view(self):
+        """
+        Test the json view of tasks by status and module.
+        """
+        url = reverse('task_by_status_json')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        tasks = Task.objects.all()
+        tasks_by_status = [
+            {'data': 1, 'label': 'Incomplete'},
+            {'data': 1, 'label': 'Ready for Review'},
+            {'data': 1, 'label': 'Complete'}
+        ]
+        tasks_by_module = [{'data': 3, 'label': u'CRM'}]
+        
+        json_string = response.content
+        data = json.loads(json_string)
+        data.get('task_by_status')
+        self.assertEqual(data.get('task_by_status'), tasks_by_status)
+        self.assertEqual(data.get('task_by_module'), tasks_by_module)
+        
+
+
+
+
+
+
+
+
