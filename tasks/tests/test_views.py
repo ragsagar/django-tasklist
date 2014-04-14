@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 
-from .models import Task
+from ..models import Task
 
 
 class TaskTestCase(TestCase):
@@ -195,3 +195,5 @@ class TaskTestCase(TestCase):
         task = Task.objects.get(pk=pk)
         self.assertEqual(task.reviewed_by, staff_user)
         self.assertEqual(task.status, Task.STATUS_CHOICES.complete)
+
+
