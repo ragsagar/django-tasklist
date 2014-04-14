@@ -2,7 +2,7 @@
 // function for activate knob
 $('.dial').knob();
 
-var json_response = $.getJSON('/tasks/report/task_by_status/json', function(response) {
+var json_response = $.getJSON(urls.report_json_url, function(response) {
 	// geting the data form backend
 	creat_pie_chart(response.task_by_status);
 	creat_rectangular_pie_chart(response.task_by_module);
