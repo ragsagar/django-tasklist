@@ -46,3 +46,12 @@ class TaskModelTestCase(TestCase):
         task = self.create_task()
         self.assertTrue(isinstance(task, Task))
         self.assertEqual(task.__str__(), task.title)
+
+    def tesk_task_url(self):
+        """
+        Test if the absolute url of task is the url to detail page.
+        """
+        task = self.create_task()
+        url = reverse('task_detail', kwargs={'pk': task.pk})
+        self.assertEqual(str(task.get_absolute_url()), url)
+
