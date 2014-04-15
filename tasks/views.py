@@ -15,7 +15,6 @@ from django_tables2.views import SingleTableMixin, SingleTableView
 from .models import Task
 from .tables import TaskTable
 
-
 class BaseListTasksView(LoginRequiredMixin,  SingleTableView):
     """
     The base view that can list all tasks. Other actual view will apply just
@@ -175,9 +174,12 @@ class ReportHomeView(LoginRequiredMixin, TemplateView):
         """
         context = super(ReportHomeView, self).get_context_data(**kwargs)
         tasks = Task.objects.all()
-        incomplete_tasks = tasks.filter(status=Task.STATUS_CHOICES.incomplete)
-        unreviewed_tasks = tasks.filter(status=Task.STATUS_CHOICES.ready_for_review)
-        completed_tasks = tasks.filter(status=Task.STATUS_CHOICES.complete)
+        incomplete_tasks = tasks.filter(
+                                status=Task.STATUS_CHOICES.incomplete)
+        unreviewed_tasks = tasks.filter(
+                                status=Task.STATUS_CHOICES.ready_for_review)
+        completed_tasks = tasks.filter(
+                                status=Task.STATUS_CHOICES.complete)
         context['incomplete_task_count'] = incomplete_tasks.count()
         context['unreviewed_tasks_count'] = unreviewed_tasks.count()
         context['completed_tasks'] = completed_tasks.count()
