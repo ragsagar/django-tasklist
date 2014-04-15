@@ -208,12 +208,18 @@ class TaskTestCase(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         tasks = Task.objects.all()
-        incomplete_tasks_count = tasks.filter(status=Task.STATUS_CHOICES.incomplete).count()
-        unreviewed_tasks_count = tasks.filter(status=Task.STATUS_CHOICES.ready_for_review).count()
-        completed_tasks_count = tasks.filter(status=Task.STATUS_CHOICES.complete).count()
-        self.assertEqual(response.context_data['incomplete_task_count'], incomplete_tasks_count)
-        self.assertEqual(response.context_data['unreviewed_tasks_count'], unreviewed_tasks_count)
-        self.assertEqual(response.context_data['unreviewed_tasks_count'], completed_tasks_count)
+        incomplete_tasks_count = tasks.filter(
+                    status=Task.STATUS_CHOICES.incomplete).count()
+        unreviewed_tasks_count = tasks.filter(
+                    status=Task.STATUS_CHOICES.ready_for_review).count()
+        completed_tasks_count = tasks.filter(
+                    status=Task.STATUS_CHOICES.complete).count()
+        self.assertEqual(response.context_data['incomplete_task_count'],
+                         incomplete_tasks_count)
+        self.assertEqual(response.context_data['unreviewed_tasks_count'],
+                         unreviewed_tasks_count)
+        self.assertEqual(response.context_data['unreviewed_tasks_count'],
+                         completed_tasks_count)
 
     def test_tasks_json_view(self):
         """
