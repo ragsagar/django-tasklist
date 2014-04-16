@@ -65,6 +65,15 @@ class TaskModelTestCase(TestCase):
         """
         Test the helper methods in Task.
         """
+        today = datetime.date.today()
+        tomorrow = today + datetime.timedelta(days=1)
+        yesterday = today - datetime.timedelta(days=1)
         completed_task = self.create_task(status=Task.STATUS_CHOICES.complete)
+        incomplete_task = self.create_task(title="New task", due_date=tomorrow)
+        self.create_task(status=Task.STATUS_CHOICES.incomplete)
+        due_task = self.create_task(title='Incomplete due task',
+                                    due_date=yesterday)
         self.assertEqual(completed_task.is_due(), False)
+        self.assertEqual(due_task.is_due(), True)
+        self.assertEqual(incomplete_task.is_due(), False)
 
