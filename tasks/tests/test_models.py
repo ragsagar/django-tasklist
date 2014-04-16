@@ -17,13 +17,19 @@ class TaskModelTestCase(TestCase):
         #self.create_task(title="Task Ready for Review",
                          #status=Task.STATUS_CHOICES.ready_for_review)
 
-    def create_task(self, title="Test task", status=1, priority=1):
+    def create_task(self,
+                    title="Test task",
+                    status=1,
+                    priority=1,
+                    due_date=None):
+        if not due_date:
+            due_date = datetime.date.today() + datetime.timedelta(days=1)
         data =  {
                 'created_by': self.user,
                 'title': title,
                 'priority': priority,
                 'module': 'CRM',
-                'due_date': datetime.date(2014, 4, 2),
+                'due_date': due_date,
                 'type': 3,
                 'description': 'testing task',
                 'assigned_user': self.user,
@@ -54,4 +60,11 @@ class TaskModelTestCase(TestCase):
         task = self.create_task()
         url = reverse('task_detail', kwargs={'pk': task.pk})
         self.assertEqual(str(task.get_absolute_url()), url)
+
+    def test_task_object_methods(self):
+        """
+        Test the helper methods in Task.
+        """
+        completed_task = self.create_task(status=Task.STATUS_CHOICES.complete)
+        self.assertEqual(completed_task.is_due(), False)
 
